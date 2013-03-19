@@ -1,0 +1,22 @@
+create or replace
+PROCEDURE LLENAR_TIEMPO3 AS 
+CURSOR c1 IS select TO_number(TO_CHAR(fo.fmo_fecha,'mmyyyy')) cod, TO_number(TO_CHAR(fo.fmo_fecha,'yyyy')) ano, to_char(fo.fmo_fecha,'month') mes
+              from sds_formatos_fmo_data_table fo, asig_material am
+              where fo.fmo_codigo=am.fmo_codigo 
+              group by fo.fmo_fecha
+              order by fo.fmo_fecha asc;
+              
+              var NUMBER := 0;
+BEGIN
+FOR i IN c1 LOOP
+  IF var <> i.cod THEN 
+  INSERT INTO D_TIEMPO3 VALUES(i.cod, i.ano, i.mes);
+  var:=i.cod;
+  END IF;
+  END LOOP;
+  NULL;
+END LLENAR_TIEMPO3;
+
+
+
+
