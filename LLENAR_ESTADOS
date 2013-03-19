@@ -1,0 +1,11 @@
+create or replace
+PROCEDURE LLENAR_ESTADOS AS 
+cursor estados is
+select etu_codigo cod, etu_nombre nom
+from sds_estatus_etu;
+BEGIN
+  for i in estados loop
+      INSERT INTO D_ESTADOS VALUES(i.cod, i.nom);
+  end loop;
+  NULL;
+END LLENAR_ESTADOS;
