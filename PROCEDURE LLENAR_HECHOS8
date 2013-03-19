@@ -1,0 +1,10 @@
+CREATE OR REPLACE PROCEDURE LLENAR_HECHOS8 AS 
+cursor cur is 
+select FMOCOD, CANTIDAD_ESTIMADA, CANTIDAD_USADA
+FROM D_MATERIALUSADO;
+BEGIN
+  for i in cur loop  
+      INSERT INTO HECHOS8 VALUES((SELECT id_sol from d_solicitud dsl where i.fmocod=dsl.fmo_cod), (to_number(i.cantidad_estimada)-to_number(i.cantidad_usada)));
+  end loop;
+  NULL;
+END LLENAR_HECHOS8;
