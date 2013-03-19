@@ -1,0 +1,10 @@
+create or replace
+PROCEDURE LLENAR_EDIFICIO AS 
+cursor c1 is
+select * from edificio;
+BEGIN
+  for i in c1 loop
+    insert into D_EDIFICIO values (secedif.nextval,i.edo_codigo,i.edo_nombre);
+    end loop;
+  NULL;
+END LLENAR_EDIFICIO;
