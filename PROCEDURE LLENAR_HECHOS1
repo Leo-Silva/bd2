@@ -1,0 +1,23 @@
+create or replace
+PROCEDURE LLENAR_HECHOS1 AS 
+  CURSOR c1 IS  select cen.id cid, dso.id_sol sol, dse.id_ser ser, max(a.his_fecha_fin) ma, min(a.his_fecha_inicio) mi, (max(a.his_fecha_fin) - min(a.his_fecha_inicio)) dur
+                from items_historico a, d_solicitud dso, d_servicios dse, sds_formatos_fmo_data_table fo, d_centro_de_costo cen
+                where a.fmo_codigo=dso.fmo_cod and a.svo_codigo=dse.svo_cod and fo.fmo_codigo=a.fmo_codigo and cen.id_centro=fo.jef_infa_ctr_id_centro
+                group by cen.id, dso.id_sol, dse.id_ser
+                having max(etu_codigo)=5
+                order by cen.id asc, sol asc, ser asc;
+    
+  CURSOR c2(fmax DATE, fmin DATE) IS SELECT id_t, fecha_max, fecha_min from d_tiempo1 where fecha_max=fmax and fecha_min=fmin;
+
+BEGIN 
+  FOR i IN c1 LOOP 
+    FOR j IN c2(i.ma, i.mi) LOOP
+      IF (i.ma=j.fecha_max and i.mi=j.fecha_min) THEN
+      INSERT INTO HECHOS1 VALUES(i.sol, i.ser, j.id_t, i.dur, i.cid);
+      EXIT;
+      END IF;
+      END LOOP;
+    END LOOP;
+      
+  NULL;
+END LLENAR_HECHOS1;
