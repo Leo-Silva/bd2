@@ -1,0 +1,28 @@
+create or replace
+PROCEDURE LLENAR_HECHOS4 AS 
+CURSOR c1 is select count(distinct(p.cedula)) total
+              from personas p, admin a1
+              where p.cedula = a1.ced;
+CURSOR c2 is select id, fecha FROM D_TIEMPO4;
+
+CURSOR c3(fec D_TIEMPO4.fecha%TYPE) is select count(FMO_CODIGO) contfmo
+                                      from ITEMS_HISTORICO
+                                      where fec between his_fecha_inicio and his_fecha_fin and etu_codigo = 4
+                                      group by fec;
+
+fech DATE;
+cont NUMBER :=0;
+por FLOAT :=0;
+BEGIN
+FOR i IN c1 LOOP
+     
+     FOR j IN C2 LOOP
+        
+      FOR k in c3(j.fecha) LOOP
+          por:= (k.contfmo*100)/i.total;
+          INSERT INTO HECHOS4 VALUES(j.id, round(por,3), k.contfmo);
+          END LOOP;
+     END LOOP;
+END LOOP;
+  NULL;
+END LLENAR_HECHOS4;
