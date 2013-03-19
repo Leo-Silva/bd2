@@ -1,0 +1,23 @@
+create or replace
+PROCEDURE LLENAR_HECHOS10 AS 
+cursor c1 is 
+select ED.ID ID1, SE2.ID ID2, lo.edo_codigo, ih.svo_codigo,ser.svo_nombre, count(ih.svo_codigo) CANT
+from sds_localidades_lcd_data_table lo, sds_formatos_fmo_data_table fo, items_historico ih, servicios ser, D_EDIFICIO ED, D_SERVICIOS2 SE2
+where fo.jef_infa_ctr_id_centro=lo.ctr_id_centro and fo.fmo_codigo=ih.fmo_codigo and ser.svo_codigo=ih.svo_codigo AND LO.EDO_CODIGO=ED.EDO_CODIGO AND SE2.SVO_CODIGO=IH.SVO_CODIGO
+GROUP BY ED.ID, SE2.ID, lo.edo_codigo, ih.svo_codigo, ser.svo_nombre
+order by edo_codigo ASC, count(ih.svo_codigo) desc;
+temp NUMBER :=0;
+BEGIN
+  FOR i IN c1 LOOP
+    if temp=0 then
+      insert into HECHOS10 values(i.ID1, i.ID2, i.CANT);
+      temp:=i.ID1;
+    else
+      if temp<>i.ID1 then
+          insert into HECHOS10 values(i.ID1, i.ID2, i.CANT);
+          temp:=i.ID1;
+      end if;
+      end if;
+  end loop;
+  NULL;
+END LLENAR_HECHOS10;
