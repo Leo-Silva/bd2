@@ -1,0 +1,12 @@
+create or replace
+PROCEDURE LLENAR_TIEMPO4 AS 
+cursor fechas is 
+SELECT (select min(his_fecha_inicio) from items_historico) - 1 + rownum AS d
+FROM admin
+WHERE(select min(his_fecha_inicio) from items_historico) - 1 + rownum <= (select max(his_fecha_fin) from items_historico);
+BEGIN
+  for i in fechas loop
+      insert into D_TIEMPO4 values (SECTIEM4.NEXTVAL,i.d );
+  end loop;
+  NULL;
+END LLENAR_TIEMPO4;
