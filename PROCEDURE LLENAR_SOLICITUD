@@ -1,0 +1,9 @@
+create or replace
+PROCEDURE LLENAR_SOLICITUD AS 
+CURSOR SOL IS select fmo_codigo from items_historico group by fmo_codigo;
+BEGIN
+  FOR i IN SOL LOOP
+    INSERT INTO D_SOLICITUD VALUES (SECSOL.NEXTVAL, i.fmo_codigo);
+    END LOOP;
+  NULL;
+END LLENAR_SOLICITUD;
