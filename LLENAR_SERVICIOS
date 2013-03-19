@@ -1,0 +1,9 @@
+create or replace
+PROCEDURE LLENAR_SERVICIOS AS 
+CURSOR SERV IS select distinct(a.svo_codigo) Cod, a.svo_nombre Nom from servicios a, items_historico b where a.svo_codigo=b.svo_codigo;
+BEGIN
+ FOR i IN SERV LOOP
+  INSERT INTO D_SERVICIOS VALUES (SECSERV.NEXTVAL, i.Cod, i.Nom  );
+  END LOOP;
+  NULL;
+END LLENAR_SERVICIOS;
