@@ -1,0 +1,10 @@
+create or replace
+PROCEDURE LLENAR_TIEMPO1 AS 
+CURSOR T IS select max(his_fecha_fin) fmx, min(his_fecha_inicio) fmi  
+          from items_historico  GROUP BY fmo_codigo, svo_codigo having max(etu_codigo)=5 ;
+BEGIN
+ FOR i IN T LOOP
+   INSERT INTO D_TIEMPO1 VALUES (SECTIEM1.NEXTVAL, i.fmx, i.fmi );
+   END LOOP;
+  NULL;
+END LLENAR_TIEMPO1;
