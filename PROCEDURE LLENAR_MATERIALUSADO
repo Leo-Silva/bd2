@@ -1,0 +1,11 @@
+create or replace
+PROCEDURE LLENAR_MATERIALUSADO AS 
+cursor c1 is
+select fmo_codigo fmocod, aml_cantidadestimada ce, aml_cantidadusada cu 
+from asig_material;
+BEGIN
+  for i in c1 loop
+    insert into D_MATERIALUSADO values (i.fmocod, i.ce, i.cu);
+    end loop;
+  NULL;
+END LLENAR_MATERIALUSADO;
