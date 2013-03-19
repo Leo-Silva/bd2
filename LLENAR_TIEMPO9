@@ -1,0 +1,15 @@
+create or replace
+PROCEDURE LLENAR_TIEMPO9 AS 
+cursor fechas is
+select  to_number(TO_CHAR(his_fecha_fin, 'YYYYMM')) cod, substr(TO_CHAR(his_fecha_fin, 'YYYYMM'), 5, 2) mes, substr(TO_CHAR(his_fecha_fin, 'YYYYMM'), 1, 4) ano
+from items_historico
+GROUP BY TO_CHAR(his_fecha_fin, 'YYYYMM')
+ORDER BY TO_CHAR(his_fecha_fin, 'YYYYMM') asc;
+BEGIN
+  for i in fechas loop
+      
+      INSERT INTO D_TIEMPO9 VALUES(i.cod, i.mes, i.ano);
+      
+  end loop;
+  NULL;
+END LLENAR_TIEMPO9;
