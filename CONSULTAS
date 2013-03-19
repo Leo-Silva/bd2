@@ -1,0 +1,57 @@
+Pregunta 1:
+  SELECT AVG(DURACION) FROM HECHOS1 GROUP by id_so;
+
+Pregunta 2:
+  SELECT dp.Ced, ds.svo_nombre, c.porcentaje 
+  FROM D_personas dp, D_servicios ds, HECHOS2 c 
+  where dp.id_per=c.id_per and ds.id_ser=c.id_serv;
+
+Pregunta 3:
+  Select a.mes, b.cantmax, b.cantmin 
+  from d_tiempo3 a, hechos3 b
+  where a.cod=b.id_tiempo;
+
+Pregunta 4:
+  select a.Fecha, b.porcentaje 
+  from D_tiempo4 a, hechos4 b;
+
+Pregunta 6:
+  select cd.descripcion, h.porcentaje 
+  from D_centro_de_costo cd, hechos6 h;
+  
+Pregunta 8:
+  select sol.fmo_cod Codigo_Formulario
+  from hechos8 h, d_solicitud sol
+  where h.material_sobrante<0 and h.id_sol=sol.id_sol;
+
+Pregunta 9:
+
+  Atendidos;
+  select fecha, count(estado)
+  from hechos9
+  where estado=5
+  group by fecha;
+  
+  En espera:
+  select fecha, count(estado)
+  from hechos9
+  where (estado=1) or (estado=3)
+  group by fecha;
+
+Pregunta 10:
+  Select d.svo_nombre, h.cantidad 
+  from hechos10 h, D_Servicios2 d 
+  where h.id_svo2=d.id;
+
+Pregunta 11:
+  Mas lento:
+  select h1.id_centro, avg(h1.duracion) 
+  from hechos1 h1 
+  having avg(h1.duracion)=(select max( avg(h1.duracion)) from hechos1 h1 group by h1.id_centro)
+  group by h1.id_centro ;
+
+  Mas rapido:
+  select h1.id_centro, avg(h1.duracion) 
+  from hechos1 h1 
+  having avg(h1.duracion)=(select min( avg(h1.duracion)) from hechos1 h1 group by h1.id_centro)
+  group by h1.id_centro
