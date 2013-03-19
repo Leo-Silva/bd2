@@ -1,0 +1,21 @@
+create or replace
+PROCEDURE LLENAR_HECHOS2 AS 
+CURSOR c1 IS select count(infa_cedula) total, infa_cedula, dp.id_per idper
+             from asig_personal ap, d_personas dp where dp.ced=ap.infa_cedula GROUP BY infa_cedula, dp.id_per ;
+CURSOR c2 (cedula asig_personal.infa_cedula%TYPE) IS select svo_codigo, count(svo_codigo) serto, ds.id_ser idser 
+             from asig_personal ap, d_servicios ds where ap.svo_codigo=ds.svo_cod and INFA_CEDULA=cedula GROUP BY svo_codigo, ds.id_ser ; 
+
+cantidadtotal NUMBER :=0;
+cantidadser NUMBER :=0;
+porcentaje FLOAT :=0;
+BEGIN
+FOR i IN c1 LOOP
+     cantidadtotal:=i.total;
+     FOR j IN c2(i.infa_cedula) LOOP 
+       cantidadser:=j.serto;
+       porcentaje:=(cantidadser*100)/cantidadtotal; 
+       INSERT INTO Hechos2 VALUES(j.idser, i.idper, round(porcentaje, 3));
+       END LOOP;
+END LOOP;
+  NULL;
+END LLENAR_HECHOS2;
