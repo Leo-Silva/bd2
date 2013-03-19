@@ -1,0 +1,9 @@
+create or replace
+PROCEDURE LLENAR_PERSONAS AS 
+CURSOR c1 is select  DISTINCT(p.cedula) ced, p.nombre nom, p.apellido ape from asig_personal ap, PERSONAS p where ap.infa_cedula=p.cedula;
+BEGIN
+FOR i IN c1 LOOP
+  INSERT INTO D_PERSONAS VALUES(SECPER.NEXTVAL, i.ced, i.nom, i.ape);
+  END LOOP;
+  NULL;
+END LLENAR_PERSONAS;
