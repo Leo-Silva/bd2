@@ -16,7 +16,3 @@ FOR i IN c1 LOOP
   END LOOP;
   NULL;
 END LLENAR_TIEMPO3;
-
-
-
-
