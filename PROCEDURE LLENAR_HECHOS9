@@ -1,0 +1,11 @@
+create or replace
+PROCEDURE LLENAR_HECHOS9 AS 
+cursor cur is 
+select to_number(TO_CHAR(his_fecha_fin, 'YYYYMM')) fecha, to_number(etu_codigo) estado
+from items_historico;
+BEGIN
+  for i in cur loop  
+      INSERT INTO HECHOS9 VALUES(i.fecha, i.estado);
+  end loop;
+  NULL;
+END LLENAR_HECHOS9;
