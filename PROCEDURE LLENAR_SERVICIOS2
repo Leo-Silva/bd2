@@ -1,0 +1,23 @@
+create or replace
+PROCEDURE LLENAR_SERVICIOS2 AS 
+cursor c1 is 
+select lo.edo_codigo, ih.svo_codigo,ser.svo_nombre, count(ih.svo_codigo)
+from sds_localidades_lcd_data_table lo, sds_formatos_fmo_data_table fo, items_historico ih, servicios ser
+where fo.jef_infa_ctr_id_centro=lo.ctr_id_centro and fo.fmo_codigo=ih.fmo_codigo and ser.svo_codigo=ih.svo_codigo
+group by lo.edo_codigo, ih.svo_codigo, ser.svo_nombre
+order by edo_codigo ASC, count(ih.svo_codigo) desc;
+temp NUMBER :=0;
+BEGIN
+  FOR i IN c1 LOOP
+    if temp=0 then
+      insert into d_servicios2 values(secserv2.nextval, i.svo_codigo, i.svo_nombre);
+      temp:=i.edo_codigo;
+    else
+      if temp<>i.edo_codigo then
+          insert into d_servicios2 values(secserv2.nextval, i.svo_codigo, i.svo_nombre);
+          temp:=i.edo_codigo;
+      end if;
+      end if;
+  end loop;
+  NULL;
+END LLENAR_SERVICIOS2;
