@@ -1,0 +1,12 @@
+create or replace
+PROCEDURE LLENAR_HECHOS6 AS 
+cursor c1 is select ID,(count(jef_infa_ctr_id_centro)*100)/(select count(jef_infa_ctr_id_centro) from sds_formatos_fmo_data_table) por
+from sds_formatos_fmo_data_table, D_CENTRO_DE_COSTO
+WHERE ID_CENTRO=jef_infa_ctr_id_centro
+GROUP BY ID;
+BEGIN
+ for i in c1 loop
+  insert into hechos6 values(i.id, round(i.por,3));
+  end loop;
+  NULL;
+END LLENAR_HECHOS6;
